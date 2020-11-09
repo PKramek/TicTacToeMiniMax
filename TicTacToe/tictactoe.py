@@ -1,4 +1,3 @@
-import copy
 from typing import Tuple, List
 
 
@@ -6,14 +5,9 @@ class TicTacToe:
     EMPTY = ''
     FIRST = 'O'
     SECOND = 'X'
-
-    # Used to indicate that there was a draw at the end of the game
-    FIRST_WON = 'O won'
-    SECOND_WON = 'X won'
     TIE = 'Tie'
 
     def __init__(self):
-        # to allow for different representations of the board
         self.board = None
         self.winner = None
 
@@ -39,19 +33,16 @@ class TicTacToe:
         return possible_moves
 
     @staticmethod
-    def get_board_state_after_move_for_board(x: int, y: int, player: str,
-                                             board: List[List['str']]
-                                             ) -> List[List['str']]:
-        board_copy = copy.deepcopy(board)
-        if board_copy[x][y] == TicTacToe.EMPTY:
-            board_copy[x][y] = player
-        else:
-            raise ValueError('Position x={}, y={} is not empty'.format(x, y))
-
-        return board_copy
-
-    @staticmethod
     def get_winner_for_board(board: List[List['str']]):
+        """
+
+        :param board:
+        :type board:
+        :return: Return None if there is no winner or one of the constants: [TicTacToe.FIRST,
+                                                                            TicTacToe.SECOND,
+                                                                            TicTacToe.TIE]
+        :rtype: str
+        """
         # horizontal
         for i in range(len(board)):
             if board[i][0] != TicTacToe.EMPTY and board[i][0] == board[i][1] == board[i][2]:
@@ -70,6 +61,7 @@ class TicTacToe:
         elif board[0][2] != TicTacToe.EMPTY and board[0][2] == board[1][1] == board[2][0]:
             return board[0][2]
 
+        # If no moves left that means that there is a tie
         elif not TicTacToe.any_moves_left_for_board(board):
             return TicTacToe.TIE
 
@@ -84,6 +76,30 @@ class TicTacToe:
 
         return False
 
+    @staticmethod
+    def get_other_player(current_player):
+        lookup = {
+            TicTacToe.FIRST: TicTacToe.SECOND,
+            TicTacToe.SECOND: TicTacToe.FIRST
+        }
+        return lookup[current_player]
+
+    def make_move(self, x: int, y: int, player: str):
+        if self.board[x][y] == TicTacToe.EMPTY:
+            self.board[x][y] = player
+        else:
+            raise ValueError('Position x={}, y={} is not empty'.format(x, y))
+
+        return self.board
+
+    def undo_move(self, x: int, y: int, player: str):
+        if self.board[x][y] == player:
+            self.board[x][y] = TicTacToe.EMPTY
+        else:
+            raise ValueError('Position x={}, y={} is empty'.format(x, y))
+
+        return self.board
+
     def is_over(self):
         winner = self.get_winner_for_board(self.board)
         if winner is not None:
@@ -94,15 +110,8 @@ class TicTacToe:
     def get_all_possible_moves(self):
         return self.get_all_possible_moves_for_board(self.board)
 
-    def make_move(self, x: int, y: int, player: str):
-        try:
-            board = self.get_board_state_after_move_for_board(x, y, player, self.board)
-        except ValueError as e:
-            raise e
-        else:
-            self.board = board
-        # TODO refactor this try-catch code
-
     def print_board(self):
+        print('##' * 20)
         for row in self.board:
             print(row)
+        print('##' * 20)
