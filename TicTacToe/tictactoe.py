@@ -26,7 +26,7 @@ class TicTacToe:
         self.reset_game()
 
     def reset_game(self):
-        # # numpy array is used to greatly speedup copying of boards, this reduces execution time
+        # # numpy array is used to greatly speed-up copying of boards, this reduces execution time
         # for approximately a factor o 2
         self.board = array([
             [self.EMPTY, self.EMPTY, self.EMPTY],
@@ -36,7 +36,7 @@ class TicTacToe:
         self.winner = None
 
     @staticmethod
-    def get_all_possible_moves_for_board(board: List[List['str']]) -> List[Tuple[int, int]]:
+    def get_all_possible_moves_for_board(board: List[List[int]]) -> List[Tuple[int, int]]:
 
         possible_moves = []
         for x in range(3):
@@ -48,7 +48,7 @@ class TicTacToe:
 
     @staticmethod
     def get_board_state_after_move_for_board(x: int, y: int, player: str,
-                                             board: List[List['str']]
+                                             board: List[List[int]]
                                              ) -> array:
         board_copy = np_copy(board)
 
@@ -60,7 +60,7 @@ class TicTacToe:
         return board_copy
 
     @staticmethod
-    def get_winner_for_board(board: List[List['str']]) -> int:
+    def get_winner_for_board(board: List[List[int]]) -> int:
         """
 
         :param board:
@@ -95,7 +95,7 @@ class TicTacToe:
         return None
 
     @staticmethod
-    def any_moves_left_for_board(board: List[List['str']]) -> bool:
+    def any_moves_left_for_board(board: List[List[int]]) -> bool:
         for row in board:
             for column in row:
                 if column == TicTacToe.EMPTY:

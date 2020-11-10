@@ -9,13 +9,12 @@ class Node:
     # To speedup access to fields of objects and reduce RAM usage
     __slots__ = ['board', 'move', 'player_symbol', '_children']
 
-    def __init__(self, board: List[List[str]], move: Optional[Tuple[int, int]], player_symbol: str):
+    def __init__(self, board: List[List[int]], move: Optional[Tuple[int, int]], player_symbol: str):
         self.board = board
         self.move = move
         self.player_symbol = player_symbol
         self._children = None
 
-    # Lazy object creation
     @property
     def children(self) -> List[Node]:
         """
@@ -59,9 +58,9 @@ class GameTree:
     This class represents game tree
     """
 
-    def __init__(self, starting_board: List[List[str]], first_player_symbol):
+    def __init__(self, starting_board: List[List[int]], first_player_symbol):
         # first node does not have a move, and symbol must be other than the first player
-        self.start_symbol = symbol = TicTacToe.get_other_player(first_player_symbol)
+        self.start_symbol = TicTacToe.get_other_player(first_player_symbol)
         self.root = Node(starting_board, None, self.start_symbol)
 
     def make_move(self, move: Tuple[int, int], player_symbol: str) -> None:
@@ -86,5 +85,5 @@ class GameTree:
     def get_roots_children(self) -> List[Node]:
         return self.root.children
 
-    def reset(self, starting_board: List[List[str]]):
+    def reset(self, starting_board: List[List[int]]):
         self.root = Node(starting_board, None, self.start_symbol)

@@ -2,7 +2,7 @@ import itertools
 from time import time
 
 from TicTacToe.game_tree import GameTree
-from TicTacToe.players import MiniMaxTreePlayer, HeuristicMiniMaxTreePlayer
+from TicTacToe.players import HeuristicMiniMaxTreePlayer, MiniMaxTreePlayer
 from TicTacToe.tictactoe import TicTacToe
 
 tictactoe_game = TicTacToe()
@@ -12,6 +12,8 @@ game_tree = GameTree(tictactoe_game.board, TicTacToe.FIRST)
 # tree_player_2 = RandomTreePlayer(game_tree, TicTacToe.SECOND)
 
 tree_player_1 = HeuristicMiniMaxTreePlayer(game_tree, TicTacToe.FIRST, 3)
+# tree_player_2 = HeuristicMiniMaxTreePlayer(game_tree, TicTacToe.SECOND, 3)
+
 tree_player_2 = MiniMaxTreePlayer(game_tree, TicTacToe.SECOND)
 
 wins_dict = {TicTacToe.FIRST_SYMBOL: 0,
@@ -32,8 +34,6 @@ for i in range(5):
 
     wins_dict[tictactoe_game.winner] += 1
 time_end = time()
-
-tictactoe_game.print_board()
 
 print(time_end - time_start)
 print(wins_dict)
