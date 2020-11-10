@@ -21,6 +21,8 @@ class TicTacToe:
         self.reset_game()
 
     def reset_game(self):
+        # # numpy array is used to greatly speedup copying of boards, this reduces execution time
+        # for approximately a factor o 2
         self.board = array([
             [self.EMPTY, self.EMPTY, self.EMPTY],
             [self.EMPTY, self.EMPTY, self.EMPTY],
@@ -44,6 +46,7 @@ class TicTacToe:
                                              board: List[List['str']]
                                              ) -> array:
         board_copy = np_copy(board)
+
         if board_copy[x][y] == TicTacToe.EMPTY:
             board_copy[x][y] = player
         else:
@@ -137,10 +140,12 @@ class TicTacToe:
         representation_lookup = {self.EMPTY: self.EMPTY_SYMBOL,
                                  self.FIRST: self.FIRST_SYMBOL,
                                  self.SECOND: self.SECOND_SYMBOL}
-        board_to_print = []
         print('##' * 20)
+
         for row in self.board:
             row_representation = []
             for element in row:
                 row_representation.append(representation_lookup[element])
+            print(row_representation)
+
         print('##' * 20)

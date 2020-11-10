@@ -19,7 +19,7 @@ wins_dict = {TicTacToe.FIRST: 0,
              TicTacToe.TIE: 0}
 
 time_start = time()
-for i in range(10):
+for i in range(1):
     players = itertools.cycle([tree_player_1, tree_player_2])
     tictactoe_game.reset_game()
     game_tree.reset(tictactoe_game.board)
@@ -32,6 +32,8 @@ for i in range(10):
 
     wins_dict[tictactoe_game.winner] += 1
 time_end = time()
+
+tictactoe_game.print_board()
 
 print(time_end - time_start)
 print(wins_dict)
