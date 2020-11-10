@@ -1,11 +1,17 @@
-import copy
 from typing import Tuple, List
+
+from numpy import copy as np_copy, array
 
 
 class TicTacToe:
-    EMPTY = ''
-    FIRST = 'O'
-    SECOND = 'X'
+    FIRST = 0
+    SECOND = 1
+    EMPTY = -1
+
+    FIRST_SYMBOL = 'O'
+    SECOND_SYMBOL = 'X'
+    EMPTY_SYMBOL = ''
+
     TIE = 'Tie'
 
     def __init__(self):
@@ -15,11 +21,11 @@ class TicTacToe:
         self.reset_game()
 
     def reset_game(self):
-        self.board = [
+        self.board = array([
             [self.EMPTY, self.EMPTY, self.EMPTY],
             [self.EMPTY, self.EMPTY, self.EMPTY],
             [self.EMPTY, self.EMPTY, self.EMPTY]
-        ]
+        ])
         self.winner = None
 
     @staticmethod
@@ -36,8 +42,8 @@ class TicTacToe:
     @staticmethod
     def get_board_state_after_move_for_board(x: int, y: int, player: str,
                                              board: List[List['str']]
-                                             ) -> List[List['str']]:
-        board_copy = copy.deepcopy(board)
+                                             ) -> array:
+        board_copy = np_copy(board)
         if board_copy[x][y] == TicTacToe.EMPTY:
             board_copy[x][y] = player
         else:
@@ -128,7 +134,13 @@ class TicTacToe:
         return self.get_all_possible_moves_for_board(self.board)
 
     def print_board(self):
+        representation_lookup = {self.EMPTY: self.EMPTY_SYMBOL,
+                                 self.FIRST: self.FIRST_SYMBOL,
+                                 self.SECOND: self.SECOND_SYMBOL}
+        board_to_print = []
         print('##' * 20)
         for row in self.board:
-            print(row)
+            row_representation = []
+            for element in row:
+                row_representation.append(representation_lookup[element])
         print('##' * 20)
