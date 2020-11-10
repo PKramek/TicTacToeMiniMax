@@ -101,3 +101,4 @@ class MiniMaxPlayer(Player):
 
     def heuristic_evaluation(self):
         raise ValueError('WTF')
+        # TODO finish this function
