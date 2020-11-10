@@ -1,3 +1,4 @@
+import copy
 from typing import Tuple, List
 
 
@@ -31,6 +32,18 @@ class TicTacToe:
                     possible_moves.append((x, y))
 
         return possible_moves
+
+    @staticmethod
+    def get_board_state_after_move_for_board(x: int, y: int, player: str,
+                                             board: List[List['str']]
+                                             ) -> List[List['str']]:
+        board_copy = copy.deepcopy(board)
+        if board_copy[x][y] == TicTacToe.EMPTY:
+            board_copy[x][y] = player
+        else:
+            raise ValueError('Position x={}, y={} is not empty'.format(x, y))
+
+        return board_copy
 
     @staticmethod
     def get_winner_for_board(board: List[List['str']]):
