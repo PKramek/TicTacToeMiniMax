@@ -6,6 +6,9 @@ from TicTacToe.tictactoe import TicTacToe
 
 
 class Node:
+    # To speedup access to fields of objects and reduce RAM usage
+    __slots__ = ['board', 'move', 'player_symbol', '_children']
+
     def __init__(self, board: List[List[str]], move: Optional[Tuple[int, int]], player_symbol: str):
         self.board = board
         self.move = move
@@ -58,8 +61,8 @@ class GameTree:
 
     def __init__(self, starting_board: List[List[str]], first_player_symbol):
         # first node does not have a move, and symbol must be other than the first player
-        symbol = TicTacToe.get_other_player(first_player_symbol)
-        self.root = Node(starting_board, None, symbol)
+        self.start_symbol = symbol = TicTacToe.get_other_player(first_player_symbol)
+        self.root = Node(starting_board, None, self.start_symbol)
 
     def make_move(self, move: Tuple[int, int], player_symbol: str) -> None:
         """
@@ -79,3 +82,9 @@ class GameTree:
 
     def get_root(self) -> Node:
         return self.root
+
+    def get_roots_children(self) -> List[Node]:
+        return self.root.children
+
+    def reset(self, starting_board: List[List[str]]):
+        self.root = Node(starting_board, None, self.start_symbol)

@@ -1,37 +1,37 @@
 import itertools
-from random import seed
 
 from TicTacToe.game_tree import GameTree
-from TicTacToe.players import MiniMaxPlayer
+from TicTacToe.players import RandomTreePlayer, HeuristicMiniMaxTreePlayer, MiniMaxTreePlayer
 from TicTacToe.tictactoe import TicTacToe
+from time import time
 
 tictactoe_game = TicTacToe()
+game_tree = GameTree(tictactoe_game.board, TicTacToe.FIRST)
 
-seed(42)
+# tree_player_1 = RandomTreePlayer(game_tree, TicTacToe.FIRST)
+# tree_player_2 = RandomTreePlayer(game_tree, TicTacToe.SECOND)
 
-player_1 = MiniMaxPlayer(tictactoe_game, TicTacToe.FIRST, 20)
-player_2 = MiniMaxPlayer(tictactoe_game, TicTacToe.SECOND, 20)
-# player_1 = RandomPlayer(tictactoe_game, TicTacToe.FIRST)
-# player_2 = RandomPlayer(tictactoe_game, TicTacToe.SECOND)
-
-game_tree = GameTree(tictactoe_game.board, player_1.symbol)
-
-# iterator used for convenient player selection for next round
-players = itertools.cycle([player_1, player_2])
+tree_player_1 = MiniMaxTreePlayer(game_tree, TicTacToe.FIRST)
+tree_player_2 = MiniMaxTreePlayer(game_tree, TicTacToe.SECOND)
 
 wins_dict = {TicTacToe.FIRST: 0,
              TicTacToe.SECOND: 0,
              TicTacToe.TIE: 0}
 
-for i in range(1):
+time_start = time()
+for i in range(10):
+    players = itertools.cycle([tree_player_1, tree_player_2])
     tictactoe_game.reset_game()
+    game_tree.reset(tictactoe_game.board)
 
     while not tictactoe_game.is_over():
         player = next(players)
         move = player.chose_move()
-        tictactoe_game.make_move(move, player.symbol)
         game_tree.make_move(move, player.symbol)
+        tictactoe_game.make_move(move, player.symbol)
 
     wins_dict[tictactoe_game.winner] += 1
+time_end = time()
 
+print(time_end - time_start)
 print(wins_dict)
