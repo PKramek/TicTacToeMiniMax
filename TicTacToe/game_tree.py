@@ -57,8 +57,9 @@ class GameTree:
     """
 
     def __init__(self, starting_board: List[List[str]], first_player_symbol):
-        # first node does not have a move
-        self.root = Node(starting_board, None, first_player_symbol)
+        # first node does not have a move, and symbol must be other than the first player
+        symbol = TicTacToe.get_other_player(first_player_symbol)
+        self.root = Node(starting_board, None, symbol)
 
     def make_move(self, move: Tuple[int, int], player_symbol: str) -> None:
         """
@@ -73,7 +74,8 @@ class GameTree:
         if new_root is None:
             raise ValueError('Move not possible')
         if new_root.player_symbol != player_symbol:
-            raise ValueError('It is not {} turn'.format(player_symbol))
+            raise ValueError('It is not ' + player_symbol + ' turn')
+        self.root = new_root
 
     def get_root(self) -> Node:
         return self.root

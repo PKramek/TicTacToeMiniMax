@@ -97,7 +97,9 @@ class TicTacToe:
         }
         return lookup[current_player]
 
-    def make_move(self, x: int, y: int, player: str):
+    def make_move(self, move: Tuple[int, int], player: str):
+        x = move[0]
+        y = move[1]
         if self.board[x][y] == TicTacToe.EMPTY:
             self.board[x][y] = player
         else:
@@ -105,7 +107,9 @@ class TicTacToe:
 
         return self.board
 
-    def undo_move(self, x: int, y: int, player: str):
+    def undo_move(self, move: Tuple[int, int], player: str):
+        x = move[0]
+        y = move[1]
         if self.board[x][y] == player:
             self.board[x][y] = TicTacToe.EMPTY
         else:

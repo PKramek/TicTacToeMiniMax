@@ -43,7 +43,7 @@ class MiniMaxPlayer(Player):
             best_move_value = float('inf')
 
         for move in possible_moves:
-            self.game.make_move(move[0], move[1], self.symbol)
+            self.game.make_move(move, self.symbol)
 
             move_value = self.minimax(0, not self.is_maximizing, TicTacToe.get_other_player(self.symbol))
             if self.is_maximizing is True:
@@ -55,7 +55,7 @@ class MiniMaxPlayer(Player):
                     best_move_value = move_value
                     best_move = move
 
-            self.game.undo_move(move[0], move[1], self.symbol)
+            self.game.undo_move(move, self.symbol)
 
         return best_move
 
@@ -70,9 +70,9 @@ class MiniMaxPlayer(Player):
                 all_possible_moves = self.game.get_all_possible_moves()
 
                 for move in all_possible_moves:
-                    self.game.make_move(move[0], move[1], player_symbol)
+                    self.game.make_move(move, player_symbol)
                     score = self.minimax(depth + 1, False, TicTacToe.get_other_player(player_symbol))
-                    self.game.undo_move(move[0], move[1], player_symbol)
+                    self.game.undo_move(move, player_symbol)
                     best_score = max(score, best_score)
 
                 return best_score
@@ -82,9 +82,9 @@ class MiniMaxPlayer(Player):
                 all_possible_moves = self.game.get_all_possible_moves()
 
                 for move in all_possible_moves:
-                    self.game.make_move(move[0], move[1], player_symbol)
+                    self.game.make_move(move, player_symbol)
                     score = self.minimax(depth + 1, True, TicTacToe.get_other_player(player_symbol))
-                    self.game.undo_move(move[0], move[1], player_symbol)
+                    self.game.undo_move(move, player_symbol)
                     best_score = min(score, best_score)
 
                 return best_score
