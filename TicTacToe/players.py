@@ -2,6 +2,8 @@ from abc import ABC, abstractmethod
 from random import choice as random_choice
 from typing import Tuple
 
+from numpy import array as np_array, multiply as np_multiply, sum as np_sum
+
 from TicTacToe.game_tree import GameTree, Node
 from TicTacToe.tictactoe import TicTacToe
 
@@ -24,6 +26,8 @@ class RandomTreePlayer(TreePlayer):
 
         return move
 
+
+# TODO refactor those two classes and remove code redundancy
 
 class HeuristicMiniMaxTreePlayer(TreePlayer):
     maximizing_lookup = {TicTacToe.FIRST: True,
@@ -60,7 +64,7 @@ class HeuristicMiniMaxTreePlayer(TreePlayer):
         winner = TicTacToe.get_winner_for_board(tree_node.board)
 
         if depth == self.max_depth or winner is not None:
-            return self.calculate_score(winner, depth)
+            return self.calculate_score(winner, depth, tree_node.board)
         else:
             if is_maximizing:
                 best_score = float('-inf')
@@ -82,19 +86,19 @@ class HeuristicMiniMaxTreePlayer(TreePlayer):
 
                 return best_score
 
-    def calculate_score(self, winner: str, depth):
+    def calculate_score(self, winner: str, depth, board):
         lookup = {TicTacToe.FIRST: 10,
                   TicTacToe.TIE: 0,
                   TicTacToe.SECOND: -10}
 
         if depth == self.max_depth and winner is None:
-            return self.heuristic_evaluation()
+            return self.heuristic_evaluation(board)
         else:
             return lookup[winner]
 
-    def heuristic_evaluation(self):
-        raise NotImplemented()
-        # TODO finish this function
+    def heuristic_evaluation(self, board):
+        heuristic_matrix = np_array([[3, 2, 3], [2, 4, 2], [3, 2, 3]])
+        return np_sum(np_multiply(board, heuristic_matrix))
 
 
 class MiniMaxTreePlayer(TreePlayer):

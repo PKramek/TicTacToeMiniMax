@@ -4,15 +4,20 @@ from numpy import copy as np_copy, array
 
 
 class TicTacToe:
-    FIRST = 0
-    SECOND = 1
-    EMPTY = -1
+    FIRST = 1
+    SECOND = -1
+    EMPTY = 0
+    TIE = 2
 
     FIRST_SYMBOL = 'O'
     SECOND_SYMBOL = 'X'
     EMPTY_SYMBOL = ''
+    TIE_SYMBOL = 'Tie'
 
-    TIE = 'Tie'
+    representation_lookup = {EMPTY: EMPTY_SYMBOL,
+                             FIRST: FIRST_SYMBOL,
+                             SECOND: SECOND_SYMBOL,
+                             TIE: TIE_SYMBOL}
 
     def __init__(self):
         self.board = None
@@ -55,7 +60,7 @@ class TicTacToe:
         return board_copy
 
     @staticmethod
-    def get_winner_for_board(board: List[List['str']]):
+    def get_winner_for_board(board: List[List['str']]) -> int:
         """
 
         :param board:
@@ -129,7 +134,7 @@ class TicTacToe:
     def is_over(self):
         winner = self.get_winner_for_board(self.board)
         if winner is not None:
-            self.winner = winner
+            self.winner = self.representation_lookup[winner]
 
         return winner is not None
 
@@ -137,15 +142,12 @@ class TicTacToe:
         return self.get_all_possible_moves_for_board(self.board)
 
     def print_board(self):
-        representation_lookup = {self.EMPTY: self.EMPTY_SYMBOL,
-                                 self.FIRST: self.FIRST_SYMBOL,
-                                 self.SECOND: self.SECOND_SYMBOL}
         print('##' * 20)
 
         for row in self.board:
             row_representation = []
             for element in row:
-                row_representation.append(representation_lookup[element])
+                row_representation.append(self.representation_lookup[element])
             print(row_representation)
 
         print('##' * 20)
