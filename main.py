@@ -1,5 +1,5 @@
+import csv
 import itertools
-import json
 from random import choice as random_choice
 from time import time
 from typing import Optional
@@ -91,12 +91,14 @@ class Experiment:
 
             self._results[self.tictactoe.winner] += 1
 
-    def get_formatted_results(self):
-        formatted_results = {"First won": self._results[TicTacToe.FIRST_SYMBOL],
-                             "Second won": self._results[TicTacToe.SECOND_SYMBOL],
-                             "Ties": self._results[TicTacToe.TIE_SYMBOL],
-                             "First execution time": round(self._results[self.FIRST_EXECUTION_TIME], 2),
-                             "Second execution time": round(self._results[self.SECOND_EXECUTION_TIME], 2)}
+    def get_formatted_results(self, name: str):
+        formatted_results = {
+            "Name": name,
+            "First won": self._results[TicTacToe.FIRST_SYMBOL],
+            "Second won": self._results[TicTacToe.SECOND_SYMBOL],
+            "Ties": self._results[TicTacToe.TIE_SYMBOL],
+            "First execution time": round(self._results[self.FIRST_EXECUTION_TIME], 2),
+            "Second execution time": round(self._results[self.SECOND_EXECUTION_TIME], 2)}
 
         return formatted_results
 
@@ -104,18 +106,15 @@ class Experiment:
 if __name__ == "__main__":
     program_exec_time_start = time()
 
-    experiments_results = {"random_vs_minimax": None,
-                           "random_vs_heuristic": {},
-                           "minimax_vs_heuristic": {}
-                           }
+    experiments_results = []
 
     num_of_games = 1
 
     random_vs_minimax = Experiment(Experiment.RANDOM, Experiment.MINIMAX, num_repetitions=num_of_games)
     random_vs_minimax.play_games()
 
-    results = random_vs_minimax.get_formatted_results()
-    experiments_results["random_vs_minimax"] = results
+    results = random_vs_minimax.get_formatted_results("Random vs Minimax")
+    experiments_results.append(results)
     print("Random vs Minimax")
     print(results)
 
@@ -124,21 +123,27 @@ if __name__ == "__main__":
         random_vs_heuristic_minimax = Experiment(Experiment.RANDOM, Experiment.HEURISTIC_MINIMAX,
                                                  num_repetitions=num_of_games, second_heuristic_depth=i)
         random_vs_heuristic_minimax.play_games()
-        results = random_vs_heuristic_minimax.get_formatted_results()
-        experiments_results["random_vs_heuristic"][str(i)] = results
-        print("Max depth: {}, results: {}".format(i, results))
+        name = "Random vs Heuristic MiniMax with depth {}".format(i)
+        results = random_vs_heuristic_minimax.get_formatted_results(name)
+        experiments_results.append(results)
+        print(results)
 
     print("\nMinimax vs Heuristic MiniMax")
     for i in range(1, 10):
         minimax_vs_heuristic_minimax = Experiment(Experiment.MINIMAX, Experiment.HEURISTIC_MINIMAX,
                                                   num_repetitions=num_of_games, second_heuristic_depth=i)
         minimax_vs_heuristic_minimax.play_games()
-        results = minimax_vs_heuristic_minimax.get_formatted_results()
-        experiments_results["minimax_vs_heuristic"][str(i)] = results
-        print("Max depth: {}, results: {}".format(i, results))
+        name = "Minimax vs Heuristic MiniMax with depth {}".format(i)
+        results = minimax_vs_heuristic_minimax.get_formatted_results(name)
+        experiments_results.append(results)
+        print(results)
 
-    # Saving results in json
-    with open('results.json', 'w', encoding='utf-8') as f:
-        json.dump(experiments_results, f, ensure_ascii=False, indent=4)
+    # Saving results in csv file
 
+    with open('results.csv', mode='w', newline='') as csv_file:
+        fieldnames = ['Name', "First won", "Second won", "Ties", "First execution time", "Second execution time"]
+        writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+        writer.writeheader()
+        for data in experiments_results:
+            writer.writerow(data)
     print("\nProgram execution time: {}".format(time() - program_exec_time_start))
