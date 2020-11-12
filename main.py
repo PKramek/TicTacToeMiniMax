@@ -1,4 +1,6 @@
 import itertools
+import json
+from random import choice as random_choice
 from time import time
 from typing import Optional
 
@@ -24,6 +26,9 @@ class Experiment:
                                 }
         self._results = {}
         self.num_repetitions = num_repetitions
+
+        self.players_iterator = None
+
         self.tictactoe = TicTacToe()
         self.game_tree = GameTree(self.tictactoe.board, TicTacToe.FIRST)
 
@@ -59,16 +64,23 @@ class Experiment:
             self.SECOND_EXECUTION_TIME: 0
         }
 
-    def play_games(self):
+    def set_random_first_player_and_reset_game(self):
+        self.players_iterator = itertools.cycle([(self.first_player, self.FIRST_EXECUTION_TIME),
+                                                 (self.second_player, self.SECOND_EXECUTION_TIME)])
+        self.tictactoe.reset_game()
+        first_player = random_choice([1, 2])
+        if first_player == 2:
+            next(self.players_iterator)
+            self.game_tree.reset(self.tictactoe.board, TicTacToe.SECOND)
+        else:
+            self.game_tree.reset(self.tictactoe.board, TicTacToe.FIRST)
 
+    def play_games(self):
         for _ in range(self.num_repetitions):
-            players_iterator = itertools.cycle([(self.first_player, self.FIRST_EXECUTION_TIME),
-                                                (self.second_player, self.SECOND_EXECUTION_TIME)])
-            self.tictactoe.reset_game()
-            self.game_tree.reset(self.tictactoe.board)
+            self.set_random_first_player_and_reset_game()
 
             while not self.tictactoe.is_over():
-                player, player_exec_time_results_key = next(players_iterator)
+                player, player_exec_time_results_key = next(self.players_iterator)
 
                 time_start = time()
                 move = player.chose_move()
@@ -76,7 +88,6 @@ class Experiment:
 
                 self.game_tree.make_move(move, player.symbol)
                 self.tictactoe.make_move(move, player.symbol)
-
 
             self._results[self.tictactoe.winner] += 1
 
@@ -90,49 +101,44 @@ class Experiment:
         return formatted_results
 
 
-# if __name__ == "__main__":
-#     program_exec_time_start = time()
-#
-#     experiments_results = {"random_vs_minimax": None,
-#                            "random_vs_heuristic": {},
-#                            "minimax_vs_heuristic": {}
-#                            }
-#     num_of_games = 1
-#
-#
-#
-#     random_vs_minimax = Experiment(Experiment.RANDOM, Experiment.MINIMAX, num_repetitions=num_of_games)
-#     random_vs_minimax.play_games()
-#
-#     results = random_vs_minimax.get_formatted_results()
-#     experiments_results["random_vs_minimax"] = results
-#     print("Random vs Minimax")
-#     print(results)
-#
-#     print("\nRandom vs Heuristic MiniMax")
-#     for i in range(1, 10):  # TODO make sure that max depth is 9
-#         random_vs_heuristic_minimax = Experiment(Experiment.RANDOM, Experiment.HEURISTIC_MINIMAX,
-#                                                  num_repetitions=num_of_games, second_heuristic_depth=i)
-#         random_vs_heuristic_minimax.play_games()
-#         results = random_vs_heuristic_minimax.get_formatted_results()
-#         experiments_results["random_vs_heuristic"][str(i)] = results
-#         print("Max depth: {}, results: {}".format(i, results))
-#
-#     print("\nMinimax vs Heuristic MiniMax")
-#     for i in range(1, 10):  # TODO make sure that max depth is 9
-#         minimax_vs_heuristic_minimax = Experiment(Experiment.MINIMAX, Experiment.HEURISTIC_MINIMAX,
-#                                                   num_repetitions=num_of_games, second_heuristic_depth=i)
-#         minimax_vs_heuristic_minimax.play_games()
-#         results = minimax_vs_heuristic_minimax.get_formatted_results()
-#         experiments_results["minimax_vs_heuristic"][str(i)] = results
-#         print("Max depth: {}, results: {}".format(i, results))
-#
-#     print("\nProgram execution time: {}".format(time() - program_exec_time_start))
+if __name__ == "__main__":
+    program_exec_time_start = time()
 
-num_of_games = 2
-minimax_vs_heuristic_minimax = Experiment(Experiment.HEURISTIC_MINIMAX, Experiment.MINIMAX,
-                                          num_repetitions=num_of_games, first_heuristic_depth=5,
-                                          second_heuristic_depth=20)
-minimax_vs_heuristic_minimax.play_games()
-results = minimax_vs_heuristic_minimax.get_formatted_results()
-print(results)
+    experiments_results = {"random_vs_minimax": None,
+                           "random_vs_heuristic": {},
+                           "minimax_vs_heuristic": {}
+                           }
+
+    num_of_games = 1
+
+    random_vs_minimax = Experiment(Experiment.RANDOM, Experiment.MINIMAX, num_repetitions=num_of_games)
+    random_vs_minimax.play_games()
+
+    results = random_vs_minimax.get_formatted_results()
+    experiments_results["random_vs_minimax"] = results
+    print("Random vs Minimax")
+    print(results)
+
+    print("\nRandom vs Heuristic MiniMax")
+    for i in range(1, 10):
+        random_vs_heuristic_minimax = Experiment(Experiment.RANDOM, Experiment.HEURISTIC_MINIMAX,
+                                                 num_repetitions=num_of_games, second_heuristic_depth=i)
+        random_vs_heuristic_minimax.play_games()
+        results = random_vs_heuristic_minimax.get_formatted_results()
+        experiments_results["random_vs_heuristic"][str(i)] = results
+        print("Max depth: {}, results: {}".format(i, results))
+
+    print("\nMinimax vs Heuristic MiniMax")
+    for i in range(1, 10):
+        minimax_vs_heuristic_minimax = Experiment(Experiment.MINIMAX, Experiment.HEURISTIC_MINIMAX,
+                                                  num_repetitions=num_of_games, second_heuristic_depth=i)
+        minimax_vs_heuristic_minimax.play_games()
+        results = minimax_vs_heuristic_minimax.get_formatted_results()
+        experiments_results["minimax_vs_heuristic"][str(i)] = results
+        print("Max depth: {}, results: {}".format(i, results))
+
+    # Saving results in json
+    with open('results.json', 'w', encoding='utf-8') as f:
+        json.dump(experiments_results, f, ensure_ascii=False, indent=4)
+
+    print("\nProgram execution time: {}".format(time() - program_exec_time_start))

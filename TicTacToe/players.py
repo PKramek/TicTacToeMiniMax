@@ -17,6 +17,9 @@ class TreePlayer(ABC):
     def chose_move(self) -> Tuple[int, int]:
         pass
 
+    def set_symbol(self, symbol):
+        self.symbol = symbol
+
 
 class RandomTreePlayer(TreePlayer):
 
@@ -197,7 +200,8 @@ class MiniMaxBase(TreePlayer):
                 if move_value < best_move_value:
                     best_move_value = move_value
                     best_move = move
-
+        if best_move is None:
+            raise RuntimeError()
         return best_move.move
 
     @abstractmethod

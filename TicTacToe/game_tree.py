@@ -85,5 +85,7 @@ class GameTree:
     def get_roots_children(self) -> List[Node]:
         return self.root.children
 
-    def reset(self, starting_board: List[List[int]]):
+    def reset(self, starting_board: List[List[int]], first_player_symbol: str):
+        self.start_symbol = TicTacToe.get_other_player(first_player_symbol)
         self.root = Node(starting_board, None, self.start_symbol)
+
