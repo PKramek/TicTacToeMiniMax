@@ -26,9 +26,9 @@ class Node:
             self._children = []
 
             possible_moves = TicTacToe.get_all_possible_moves_for_board(self.board)
+            next_player_symbol = TicTacToe.get_other_player(self.player_symbol)
 
             for possible_move in possible_moves:
-                next_player_symbol = TicTacToe.get_other_player(self.player_symbol)
                 board_after_move = TicTacToe.get_board_state_after_move_for_board(
                     possible_move[0],
                     possible_move[1],
