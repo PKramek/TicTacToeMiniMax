@@ -30,8 +30,6 @@ class RandomTreePlayer(TreePlayer):
         return move
 
 
-# TODO refactor those two classes and remove code redundancy
-
 class HeuristicMiniMaxTreePlayer(TreePlayer):
     maximizing_lookup = {TicTacToe.FIRST: True,
                          TicTacToe.SECOND: False}
@@ -267,7 +265,7 @@ class HeuristicMiniMaxTreePlayerV2(MiniMaxBase):
     def recurrent_minimax(self, tree_node: Node, depth: int, is_maximizing: bool, player_symbol: str) -> int:
         winner = TicTacToe.get_winner_for_board(tree_node.board)
 
-        if depth == self.max_depth or winner is not None:
+        if depth >= self.max_depth or winner is not None:
             return self.calculate_score(winner, depth, tree_node.board)
         else:
             if is_maximizing:

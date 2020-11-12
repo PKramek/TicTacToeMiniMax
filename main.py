@@ -5,7 +5,8 @@ from time import time
 from typing import Optional
 
 from TicTacToe.game_tree import GameTree
-from TicTacToe.players import HeuristicMiniMaxTreePlayerV2, RandomTreePlayer, MiniMaxTreePlayerV2
+from TicTacToe.players import RandomTreePlayer, MiniMaxTreePlayerV2, \
+    HeuristicMiniMaxTreePlayerV2
 from TicTacToe.tictactoe import TicTacToe
 
 
@@ -88,7 +89,6 @@ class Experiment:
 
                 self.game_tree.make_move(move, player.symbol)
                 self.tictactoe.make_move(move, player.symbol)
-
             self._results[self.tictactoe.winner] += 1
 
     def get_formatted_results(self, name: str):
@@ -108,7 +108,7 @@ if __name__ == "__main__":
 
     experiments_results = []
 
-    num_of_games = 1
+    num_of_games = 10
 
     random_vs_minimax = Experiment(Experiment.RANDOM, Experiment.MINIMAX, num_repetitions=num_of_games)
     random_vs_minimax.play_games()

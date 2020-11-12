@@ -1,5 +1,4 @@
 /venv
 .idea/
 TicTacToe/__pycache__/
-
-results.json
+results.csv
