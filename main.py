@@ -77,6 +77,10 @@ class Experiment:
             self.game_tree.reset(self.tictactoe.board, TicTacToe.FIRST)
 
     def play_games(self):
+
+        first_full = []
+        first_heuristic = []
+
         for _ in range(self.num_repetitions):
             self.set_random_first_player_and_reset_game()
 
@@ -108,7 +112,7 @@ if __name__ == "__main__":
 
     experiments_results = []
 
-    num_of_games = 10
+    num_of_games = 100
 
     random_vs_minimax = Experiment(Experiment.RANDOM, Experiment.MINIMAX, num_repetitions=num_of_games)
     random_vs_minimax.play_games()

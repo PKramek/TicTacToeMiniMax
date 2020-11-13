@@ -1,0 +1,20 @@
+Name,First won,Second won,Ties,First execution time,Second execution time
+Random vs Minimax,0,90,10,0.01,576.17
+Random vs Heuristic MiniMax with depth 1,0,93,7,0.0,0.27
+Random vs Heuristic MiniMax with depth 2,0,95,5,0.0,1.43
+Random vs Heuristic MiniMax with depth 3,0,90,10,0.0,7.68
+Random vs Heuristic MiniMax with depth 4,0,93,7,0.0,29.61
+Random vs Heuristic MiniMax with depth 5,0,95,5,0.0,108.01
+Random vs Heuristic MiniMax with depth 6,0,97,3,0.0,284.49
+Random vs Heuristic MiniMax with depth 7,0,91,9,0.01,501.78
+Random vs Heuristic MiniMax with depth 8,0,92,8,0.0,612.48
+Random vs Heuristic MiniMax with depth 9,0,87,13,0.0,613.18
+Minimax vs Heuristic MiniMax with depth 1,13,0,87,624.37,0.25
+Minimax vs Heuristic MiniMax with depth 2,3,0,97,613.45,1.25
+Minimax vs Heuristic MiniMax with depth 3,0,0,100,572.25,6.77
+Minimax vs Heuristic MiniMax with depth 4,0,0,100,562.03,28.67
+Minimax vs Heuristic MiniMax with depth 5,0,0,100,522.83,112.68
+Minimax vs Heuristic MiniMax with depth 6,0,0,100,599.58,264.11
+Minimax vs Heuristic MiniMax with depth 7,0,0,100,663.78,437.39
+Minimax vs Heuristic MiniMax with depth 8,0,0,100,585.13,569.79
+Minimax vs Heuristic MiniMax with depth 9,0,0,100,599.03,559.42

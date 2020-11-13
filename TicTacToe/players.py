@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from random import choice as random_choice
+from random import choice as random_choice, sample
 from typing import Tuple
 
 from numpy import array as np_array, multiply as np_multiply, sum as np_sum
@@ -104,6 +104,7 @@ class HeuristicMiniMaxTreePlayer(TreePlayer):
 
     def heuristic_evaluation(self, board):
         heuristic_matrix = np_array([[3, 2, 3], [2, 4, 2], [3, 2, 3]])
+
         return np_sum(np_multiply(board, heuristic_matrix))
 
 
@@ -180,7 +181,8 @@ class MiniMaxBase(TreePlayer):
         self.is_maximizing = MiniMaxTreePlayer.maximizing_lookup[self.symbol]
 
     def chose_move(self) -> Tuple[int, int]:
-        possible_moves = self.game_tree.get_roots_children()
+        roots_children = self.game_tree.get_roots_children()
+        possible_moves = sample(roots_children, len(roots_children))
 
         best_move = None
         if self.is_maximizing:
@@ -219,7 +221,7 @@ class MiniMaxTreePlayerV2(MiniMaxBase):
         else:
             if is_maximizing:
                 best_score = float('-inf')
-                all_possible_moves = tree_node.children
+                all_possible_moves = sample(tree_node.children, len(tree_node.children))
 
                 for move in all_possible_moves:
                     score = self.recurrent_minimax(move, False, TicTacToe.get_other_player(player_symbol))
@@ -257,7 +259,9 @@ class HeuristicMiniMaxTreePlayerV2(MiniMaxBase):
     @staticmethod
     def heuristic_evaluation(board):
         heuristic_matrix = np_array([[3, 2, 3], [2, 4, 2], [3, 2, 3]])
+
         return np_sum(np_multiply(board, heuristic_matrix))
+
 
     def minimax_tree(self, tree_node: Node, is_maximizing: bool, player_symbol: str) -> int:
         return self.recurrent_minimax(tree_node, 0, is_maximizing, player_symbol)
@@ -270,7 +274,7 @@ class HeuristicMiniMaxTreePlayerV2(MiniMaxBase):
         else:
             if is_maximizing:
                 best_score = float('-inf')
-                all_possible_moves = tree_node.children
+                all_possible_moves = sample(tree_node.children, len(tree_node.children))
 
                 for move in all_possible_moves:
                     score = self.recurrent_minimax(move, depth + 1, False, TicTacToe.get_other_player(player_symbol))
