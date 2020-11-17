@@ -17,11 +17,7 @@ class Node:
 
     @property
     def children(self) -> List[Node]:
-        """
-        This property allows for lazy creation of children for node.
 
-        :return: List[Node]
-        """
         if self._children is None:
             self._children = []
 
@@ -40,13 +36,6 @@ class Node:
         return self._children
 
     def get_child_with_move(self, move: Tuple[int, int]) -> Optional[Node]:
-        """
-        Returns a child with Node with specified move, if no child was found None is returned.
-
-        :param move: Tuple with information what move was made
-        :type move: Tuple[int, int]
-        :return: Optional[Node]
-        """
         for child in self.children:
             if child.move == move:
                 return child
@@ -54,9 +43,6 @@ class Node:
 
 
 class GameTree:
-    """
-    This class represents game tree
-    """
 
     def __init__(self, starting_board: List[List[int]], first_player_symbol):
         # first node does not have a move, and symbol must be other than the first player
@@ -64,14 +50,6 @@ class GameTree:
         self.root = Node(starting_board, None, self.start_symbol)
 
     def make_move(self, move: Tuple[int, int], player_symbol: str) -> None:
-        """
-        This method moves root of the tree to a node with a given move, this way tree always represents current
-        board
-        :param player_symbol: Symbol of a player performing move
-        :type player_symbol: str
-        :param move: Move to be made on the board
-        :type move: Tuple[int, int]
-        """
         new_root = self.root.get_child_with_move(move)
         if new_root is None:
             raise ValueError('Move not possible')

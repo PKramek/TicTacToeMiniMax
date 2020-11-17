@@ -5,8 +5,8 @@ from time import time
 from typing import Optional
 
 from TicTacToe.game_tree import GameTree
-from TicTacToe.players import RandomTreePlayer, MiniMaxTreePlayerV2, \
-    HeuristicMiniMaxTreePlayerV2
+from TicTacToe.players import RandomPlayer, MiniMaxPlayer, \
+    HeuristicMiniMaxPlayer
 from TicTacToe.tictactoe import TicTacToe
 
 
@@ -21,9 +21,9 @@ class Experiment:
     def __init__(self, first_player_type: str, second_player_type: str, num_repetitions: int,
                  first_heuristic_depth: Optional[int] = 10,
                  second_heuristic_depth: Optional[int] = 10):
-        players_class_lookup = {self.RANDOM: RandomTreePlayer,
-                                self.MINIMAX: MiniMaxTreePlayerV2,
-                                self.HEURISTIC_MINIMAX: HeuristicMiniMaxTreePlayerV2
+        players_class_lookup = {self.RANDOM: RandomPlayer,
+                                self.MINIMAX: MiniMaxPlayer,
+                                self.HEURISTIC_MINIMAX: HeuristicMiniMaxPlayer
                                 }
         self._results = {}
         self.num_repetitions = num_repetitions
@@ -77,10 +77,6 @@ class Experiment:
             self.game_tree.reset(self.tictactoe.board, TicTacToe.FIRST)
 
     def play_games(self):
-
-        first_full = []
-        first_heuristic = []
-
         for _ in range(self.num_repetitions):
             self.set_random_first_player_and_reset_game()
 
@@ -95,9 +91,9 @@ class Experiment:
                 self.tictactoe.make_move(move, player.symbol)
             self._results[self.tictactoe.winner] += 1
 
-    def get_formatted_results(self, name: str):
+    def get_formatted_results(self, description: str):
         formatted_results = {
-            "Name": name,
+            "Name": description,
             "First won": self._results[TicTacToe.FIRST_SYMBOL],
             "Second won": self._results[TicTacToe.SECOND_SYMBOL],
             "Ties": self._results[TicTacToe.TIE_SYMBOL],
