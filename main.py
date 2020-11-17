@@ -119,7 +119,7 @@ if __name__ == "__main__":
     print(results)
 
     print("\nRandom vs Heuristic MiniMax")
-    for i in range(1, 10):
+    for i in range(1, 9):
         random_vs_heuristic_minimax = Experiment(Experiment.RANDOM, Experiment.HEURISTIC_MINIMAX,
                                                  num_repetitions=num_of_games, second_heuristic_depth=i)
         random_vs_heuristic_minimax.play_games()
@@ -129,7 +129,7 @@ if __name__ == "__main__":
         print(results)
 
     print("\nMinimax vs Heuristic MiniMax")
-    for i in range(1, 10):
+    for i in range(1, 9):
         minimax_vs_heuristic_minimax = Experiment(Experiment.MINIMAX, Experiment.HEURISTIC_MINIMAX,
                                                   num_repetitions=num_of_games, second_heuristic_depth=i)
         minimax_vs_heuristic_minimax.play_games()
