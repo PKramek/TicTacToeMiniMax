@@ -1,3 +1,7 @@
+########################################################################
+__author__ = 'Piotr Kramek'
+
+########################################################################
 import csv
 import itertools
 from random import choice as random_choice

@@ -26,8 +26,8 @@ class TicTacToe:
         self.reset_game()
 
     def reset_game(self):
-        # # numpy array is used to greatly speed-up copying of boards, this reduces execution time
-        # for approximately a factor o 2
+        # numpy array is used to greatly speed-up copying of boards, this reduces execution time by
+        # approximately a factor o 2
         self.board = array([
             [self.EMPTY, self.EMPTY, self.EMPTY],
             [self.EMPTY, self.EMPTY, self.EMPTY],
